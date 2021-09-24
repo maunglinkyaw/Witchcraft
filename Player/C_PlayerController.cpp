@@ -45,6 +45,7 @@ void AC_PlayerController::BeginPlay()
 	if (m_Pawn)
 	{
 		SetViewTarget(m_Pawn);
+		SetCurrentInput(m_Pawn);
 	}
 }
 
@@ -59,8 +60,6 @@ void AC_PlayerController::InitGameplayUI()
 void AC_PlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	EvaluateMovementInput(DeltaTime);
 
 }
 
@@ -76,15 +75,6 @@ void AC_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("MoveUp", IE_Pressed, this, &AC_PlayerController::OnPressUp);
-	InputComponent->BindAction("MoveUp", IE_Released, this, &AC_PlayerController::OnReleaseUp);
-	InputComponent->BindAction("MoveDown", IE_Pressed, this, &AC_PlayerController::OnPressDown);
-	InputComponent->BindAction("MoveDown", IE_Released, this, &AC_PlayerController::OnReleaseDown);
-	InputComponent->BindAction("MoveRight", IE_Pressed, this, &AC_PlayerController::OnPressRight);
-	InputComponent->BindAction("MoveRight", IE_Released, this, &AC_PlayerController::OnReleaseRight);
-	InputComponent->BindAction("MoveLeft", IE_Pressed, this, &AC_PlayerController::OnPressLeft);
-	InputComponent->BindAction("MoveLeft", IE_Released, this, &AC_PlayerController::OnReleaseLeft);
-
 	InputComponent->BindAction("ConfirmAction", IE_Pressed, this, &AC_PlayerController::ConfirmAction);
 	InputComponent->BindAction("CancelAction", IE_Pressed, this, &AC_PlayerController::CancelAction);
 	InputComponent->BindAction("StartButton", IE_Pressed, this, &AC_PlayerController::StartButton);
@@ -93,20 +83,9 @@ void AC_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("RosterMenu", IE_Pressed, this, &AC_PlayerController::RosterMenuButton);
 	InputComponent->BindAction("CovenMenu", IE_Pressed, this, &AC_PlayerController::CovenMenuButton);
 
-	InputComponent->BindAxis("MoveVertical", this, &AC_PlayerController::MoveVertical);
-	InputComponent->BindAxis("MoveHorizontal", this, &AC_PlayerController::MoveHorizontal);
 	InputComponent->BindAxis("ZoomIn", this, &AC_PlayerController::ZoomIn);
 }
 
-void AC_PlayerController::EvaluateMovementInput(float deltaTime)
-{
-	if (m_IsPressingUp) MoveVertical(1.f);
-	else if (m_IsPressingDown) MoveVertical(-1.f);
-	
-	if (m_IsPressingRight) MoveHorizontal(1.f);
-	else if (m_IsPressingLeft) MoveHorizontal(-1.f);
-
-}
 
 void AC_PlayerController::OnPressUp()
 {
@@ -116,38 +95,29 @@ void AC_PlayerController::OnReleaseUp()
 {
 	m_IsPressingUp = false;
 }
-
 void AC_PlayerController::OnPressDown()
 {
 	m_IsPressingDown = true;
-
 }
 void AC_PlayerController::OnReleaseDown()
 {
 	m_IsPressingDown = false;
-
 }
-
 void AC_PlayerController::OnPressRight()
 {
 	m_IsPressingRight = true;
-
 }
 void AC_PlayerController::OnReleaseRight()
 {
 	m_IsPressingRight = false;
-
 }
-
 void AC_PlayerController::OnPressLeft()
 {
 	m_IsPressingLeft = true;
-
 }
 void AC_PlayerController::OnReleaseLeft()
 {
 	m_IsPressingLeft = false;
-
 }
 
 
@@ -158,7 +128,6 @@ void AC_PlayerController::RosterMenuButton()
 		m_GameplayUI->ShortcutToPage(E_MenuPage::ROSTER_MENU);
 	}
 }
-
 void AC_PlayerController::CovenMenuButton()
 {
 
@@ -181,37 +150,6 @@ void AC_PlayerController::StartButton()
 
 void AC_PlayerController::EscapeButton()
 {
-
-}
-
-void AC_PlayerController::MoveVertical(float value)
-{
-	if (value > 0.f)
-	{
-		if (m_Pawn->GetActorLocation().X < (m_MaxX))// + m_XOffset))
-		{
-			m_Pawn->m_MovementComp->AddInputVector(FVector(1.f, 0.f, 0.f) * value);
-		}
-	}
-	else if (value < 0.f)
-	{
-		if (m_Pawn->GetActorLocation().X > - (m_MaxX - m_XBottomOffset))
-			m_Pawn->m_MovementComp->AddInputVector(FVector(1.f, 0.f, 0.f) * value);
-	}
-}
-
-void AC_PlayerController::MoveHorizontal(float value)
-{
-	if (value > 0.f)
-	{
-		if (m_Pawn->GetActorLocation().Y < m_MaxY)
-			m_Pawn->m_MovementComp->AddInputVector(FVector(0.f, 1.f, 0.f) * value);
-	}
-	else if (value < 0.f)
-	{
-		if (m_Pawn->GetActorLocation().Y > -m_MaxY)
-			m_Pawn->m_MovementComp->AddInputVector(FVector(0.f, 1.f, 0.f) * value);
-	}
 
 }
 

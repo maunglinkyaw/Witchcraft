@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
+#include "C_BaseController.h"
 #include "E_CommonEnums.h"
 #include "C_PlayerController.generated.h"
 
@@ -11,7 +11,7 @@ class UCUI_Menu;
 class UCUI_Gameplay;
 
 UCLASS()
-class WITCHCRAFT_API AC_PlayerController : public APlayerController
+class WITCHCRAFT_API AC_PlayerController : public AC_BaseController
 {
 	GENERATED_BODY()
 
@@ -55,8 +55,6 @@ protected:
 
 	void InitGameplayUI();
 
-	void EvaluateMovementInput(float deltaTime);
-
 	UFUNCTION()
 	void ConfirmAction();
 	UFUNCTION()
@@ -87,10 +85,6 @@ protected:
 	UFUNCTION()
 	void CovenMenuButton();
 
-	UFUNCTION()
-	void MoveVertical(float value);
-	UFUNCTION()
-	void MoveHorizontal(float value);
 	UFUNCTION()
 	void ZoomIn(float value);
 

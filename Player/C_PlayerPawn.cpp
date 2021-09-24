@@ -2,7 +2,6 @@
 
 #include "C_PlayerPawn.h"
 #include "Camera/CameraComponent.h"
-#include "Components/InputComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SceneComponent.h"
@@ -45,5 +44,37 @@ void AC_PlayerPawn::BeginPlay()
 void AC_PlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AC_PlayerPawn::OnMoveUp(float value)
+{
+	if (value > 0.f)
+	{
+		if (GetActorLocation().X < (m_MaxX))// + m_XOffset))
+		{
+			m_MovementComp->AddInputVector(FVector(1.f, 0.f, 0.f) * value);
+		}
+	}
+	else if (value < 0.f)
+	{
+		if (GetActorLocation().X > -(m_MaxX - m_XBottomOffset))
+			m_MovementComp->AddInputVector(FVector(1.f, 0.f, 0.f) * value);
+	}
+
+}
+
+void AC_PlayerPawn::OnMoveRight(float value)
+{
+	if (value > 0.f)
+	{
+		if (GetActorLocation().Y < m_MaxY)
+			m_MovementComp->AddInputVector(FVector(0.f, 1.f, 0.f) * value);
+	}
+	else if (value < 0.f)
+	{
+		if (GetActorLocation().Y > -m_MaxY)
+			m_MovementComp->AddInputVector(FVector(0.f, 1.f, 0.f) * value);
+	}
 
 }
